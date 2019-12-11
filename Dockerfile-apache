@@ -1,1 +1,3 @@
 FROM php:apache-stretch
+COPY site/index.php /var/www/html/index.php
+ 

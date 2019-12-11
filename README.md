@@ -1,2 +1,2 @@
 # dockerex2
-compose file
+compose file example - LAMP Stack

@@ -9,10 +9,8 @@ services:
       context: .
       dockerfile: Dockerfile-apache
     ports:
-    - "8080:80"
+    - "80:80"
     restart: unless-stopped
-    links:
-    - mysql
   mysql:
     image: mysql:latest
     environment:
@@ -22,5 +20,6 @@ services:
     volumes:
     - db:/var/lib/mysql
     - /dev/shm:/dev/shm
+    restart: unless-stopped
 volumes:
   db:
