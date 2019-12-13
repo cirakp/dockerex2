@@ -1,0 +1,348 @@
+https://en.wikipedia.org/wiki/Cargo_cult_programming
+https://en.wikipedia.org/wiki/CI/CD
+https://en.wikipedia.org/wiki/Virtual_private_server
+https://en.wikipedia.org/wiki/CentOS
+
+Linux alapok:
+
+yum rpm apt
+
+du mount
+
+chmod chown useradd usermod
+
+fuser ps kill
+
+NET curl wget ping telnet ssh scp
+
+top 
+nohup ls > /dev/null &
+fuser 80/tcp
+
+lsof
+
+
+https://en.wikipedia.org/wiki/UnionFS
+https://en.wikipedia.org/wiki/OverlayFS
+
+sudo mount --bind pathx pathy
+
+daemonok "leforkolnak" és "felülnek" vmilyen socker-re
+dockerd
+
+yum install httpd
+httpd -DFOREGROUND
+fuser 80/tcp (mi fut 80-on)
+
+https://en.wikipedia.org/wiki/Kubernetes
+https://en.wikipedia.org/wiki/Open_Container_Initiative
+
+https://en.wikipedia.org/wiki/Red_Hat_Enterprise_Linux
+RHEL8 buildah, podman-t ajánlja
+
+runC / OCI
+
+https://en.wikipedia.org/wiki/VirtualBox
+QEMU (KVM) , virtuaBox, VMWare
+
+platformvirtualizáció
+
+https://en.wikipedia.org/wiki/Caveat_emptor
+https://en.wikipedia.org/wiki/DigitalOcean
+
+alkalmazásvizualizáció - rögzített és izolált köynezet
+ép ésszel használható a kernelben régóta bent lévő 
+
+https://en.wikipedia.org/wiki/Hyper-V
+
+a contaionerek provisioning-jét végzi
+
+nincs boot sezkvencia (<1 sec startup time)
+
+yum install docker
+systemctl start docker
+ps aux | grep docker
+systemctl enable docker
+groupadd docker
+usermod -aG docker student
+systemctl restart docker
+
+[student@localhost ~]$ docker run hello-world
+
+ha a setup-jaink összetettebbek, akkor hosszabb is lehet a docker parancs
+
+[student@localhost ~]$ docker run hello-world
+
+[student@localhost ~]$ docker run --name test -i -t ubuntu /bin/bash
+
+[student@localhost ~]$ docker ps 
+
+run = create + start + attach
+
+[student@localhost ~]$ docker start test
+test
+[student@localhost ~]$ docker attach test
+
+[student@localhost ~]$ docker stop test2
+test2
+
+
+[student@localhost ~]$ docker run --name  testxx --rm -i -t ubuntu /bin/bash
+ha kilép, eldobja a containert
+
+
+megmarad a FS futások között.
+[student@localhost ~]$ docker start test
+test
+[student@localhost ~]$ docker attach test
+root@c05c94b0385a:/# echo 1> /tmp/e.txt
+root@c05c94b0385a:/# cat /tmp/e.txt 
+
+root@c05c94b0385a:/# echo 1 > /tmp/e.txt
+root@c05c94b0385a:/# cat /tmp/e.txt 
+1
+root@c05c94b0385a:/# exit
+[student@localhost ~]$ docker start test
+test
+[student@localhost ~]$ docker attach test
+root@c05c94b0385a:/# cat /tmp/e.txt 
+1
+
+
+persistens adatot ne a kontainerbe!
+
+
+[student@localhost ~]$ docker create -it --name testx ubuntu /bin/bash
+a145eb0ad99a9d5e99692f044691535e9c28ea4dccf133605ac62f75d89a0229
+
+[student@localhost ~]$ docker start testx
+testx
+[student@localhost ~]$ docker attach testx
+
+ha nem adunk meg --user-t, akkor root (a container-en belül)
+
+https://en.wikipedia.org/wiki/Digital_Ocean
+https://en.wikipedia.org/wiki/Amazon_Web_Services
+https://en.wikipedia.org/wiki/AWS_Lambda
+
+
+[student@localhost ~]$ docker run --name apache -p 8080:80 httpd:2.4
+
+"milyen tévedésben él éppen" :D
+
+docker stats
+https://en.wikipedia.org/wiki/Alpine_Linux
+
+docker top apache
+[student@localhost ~]$ docker logs apache
+
+[student@localhost ~]$ docker exec -it apache  /bin/bash
+
+[student@localhost ~]$ docker exec -it apache  /bin/ls
+
+[student@localhost ~]$ docker exec -u nobody -it apache  /bin/ls
+
+[student@localhost ~]$ docker exec -u nobody -it 838c9679c6d9  /bin/ls
+
+[student@localhost ~]$ docker run --name apache2 -d -p 8080:80 httpd:2.4
+
+
+https://docs.docker.com/network/bridge/
+
+--link container név lesz a host név
+
+linked containers see each other's env. variables
+
+
+User bridge network:
+[student@localhost ~]$ docker network create mynet
+a2a0829b88508410ac04eae844f61cb7e1786c303bc3a0d6a5d7e9abd593c41c
+
+[student@localhost ~]$ docker create --name testcont --network mynet httpd:2.4
+489df908e351c514f2a596888b5e1655c2432e08650deb3f1a65407d3434fa5b
+
+[student@localhost ~]$ docker create --name testcont2 --network mynet -p 8080:80 httpd:2.4
+84ba81a4040b2d15485b1a891eb5fc217bced751f7db8b21aa0f9442b5346f3f
+
+[student@localhost ~]$ docker create --name testcont3 httpd:2.4
+f1a720ebab4ee0220409e04835e4bb6d914c44be1676f741a36408261177c235
+
+[student@localhost ~]$ docker network connect mynet testcont3
+
+[student@localhost ~]$ docker network disconnect mynet testcont3
+
+docker network create netw1
+docker network create netw2
+[student@localhost ~]$ docker run --rm -it --name bb1 --network netw1 busybox sh
+[student@localhost ~]$ docker network connect netw2 bb1
+
+
+
+https://en.wikibooks.org/wiki/Perl_Programming/PSGI
+
+[student@localhost ~]$ docker pull publici/httpd
+[student@localhost ~]$ docker run --name publici_httpd -d -p 8081:80 publici/httpd
+
+[student@localhost ~]$ docker save httpd > httpd.tar
+[student@localhost ~]$ docker load -i httpd.tar 
+
+[student@localhost ~]$ docker export apache2 > snapshot.tar
+[student@localhost ~]$ docker import snapshot.tar
+
+[student@localhost ~]$ docker commit apache2
+[student@localhost ~]$ docker image ls --no-trunc
+
+[student@localhost ~]$ docker image prune
+
+day2=====
+=======
+====
+docker rmi docker.io/hello-world
+
+
+docker cp 
+/var/lib/docker
+
+[student@localhost ~]$ echo 1 > test
+[student@localhost ~]$ docker cp test shubuntu:/tmp
+[student@localhost ~]$ docker cp shubuntu:/tmp/test ./test2
+
+docker run -it --name shubuntu ubuntu sh
+docker version
+
+docker pull debian:jessie
+
+docker pull debian:jessie+
+docker network create dbnet
+
+docker run --rm -it --name debc --network dbnet debian:jessie /bin/bash
+
+docker exec -it debc apt-get update
+docker inspect debc
+docker stop debc
+
+docker rm debc
+docker network rm dbnet
+docker rmi debian:jessie
+
+
+https://en.wikipedia.org/wiki/Copy-on-write
+
+docker volume create testvolume
+
+docker volume ls
+docker volume rm testvolume
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=1234  mysql:latest
+
+docker exec -i mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' < /home/student/mydb/dump.sql
+
+docker build --build-arg
+
+yum install mysql
+
+docker exec -it some-mysql /bin/bash
+mysql -p1234
+
+docker volume create mysqlv
+docker run --name mysqltest -e MYSQL_ROOT_PASSWORD=1234 -v mysqlv:/var/lib/mysql mysql:latest
+
+bind mounts 
+run -v path:path
+--mount a -v mellett friss verziókban
+
+docker run -it --rm  --name dancertest -v "$PWD/dance.pl":/tmp/dance.pl fedora:30 perl /tmp/dance.pl
+docker run -it --name dancertest fedora:30 /bin/bash
+dnf install perl perl-Dancer2
+
+docker run -p 3000:3000 -it --rm  -v "$PWD/dance.pl":/tmp/dance.pl:Z test/dancertest:latest perl /tmp/dance.pl
+
+[student@localhost ~]$ docker commit admiring_euclid test/dancertest:prod
+sha256:df1ade0762126419e55d6fda918e443cb1f19384e782d96b570fbb138be76228
+
+docker run -it -p 3000:3000 test/dancertest:prod perl /usr/src/dance.pl
+
+RUN yum -y update && yum -y clean all
+
+docker run -it -p 3000:3000 test/dancertest:prod perl /usr/src/dance.pl
+
+docker run -it -p 3000:3000 test/dancertest:new
+
+docker run --rm test/dancertest:new -e "print time x 10"
+
+
+https://hu.wikipedia.org/wiki/Nagios
+
+https://www.zabbix.com/zabbix_agent
+https://hub.docker.com/r/zabbix/zabbix-agent/dockerfile
+https://hub.docker.com/r/mariadb/server/dockerfile
+
+docker build .
+
+docker run -it --rm centos-zsh:latest
+
+use create
+
+docker run -it -e MYSQL_ROOT_PASSWORD=1234 216e0606e912 
+
+docker build -t apachshadow:latest .
+docker run -dit --name my-running-app -p 8081:80 apachshadow:latest
+
+https://docs.docker.com/compose/install/
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+LAMP stack  (linux apache mysql php)
+https://en.wikipedia.org/wiki/LAMP_(software_bundle)
+
+
+https://docs.docker.com/registry/deploying/
+
+$ docker run -d \
+  --restart=always \
+  --name registry \
+  -v "$(pwd)"/certs:/certs \
+  -e REGISTRY_HTTP_ADDR=0.0.0.0:443 \
+  -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
+  -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
+  -p 443:443 \
+  registry:2
+
+
+https://www.openshift.com/learn/what-is-openshift
+
+docker swarm init
+docker swarm leave
+
+https://docs.openstack.org/train/
+
+docker service create --replicas=3 --name=apacher -p 8080:80 httpd:2.4
+docker service ls
+
+docker service ps apacher
+
+OTC=Open Telekom Cloud
+https://open-telekom-cloud.com/de
+
+
+docker service inspect apacher
+docker service scale apacher=5
+
+
+docker service update --replicas=4 --update-delay=15s --image centos/httpd-24-centos7:2.4 apacher
+docker service update --rollback apacher
+
+https://success.docker.com/article/networking
+
+https://kubernetes.io/docs/concepts/workloads/pods/pod/#what-is-a-pod
+https://kubernetes.io/docs/tasks/tools/install-minikube/
+
+https://kubernetes.io/docs/tutorials/
+https://developers.redhat.com/blog/2018/08/29/intro-to-podman/
+
+https://www.docker.com/blog/runc/
+https://en.wikipedia.org/wiki/Oracle_Cloud#Infrastructure_as_a_Service_(IaaS)
+
+
+
+
